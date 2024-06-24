@@ -41,7 +41,7 @@ public interface UsuarioRepository extends GenericRepository<Usuario, Long> {
     Usuario findByUsuId(Long id);
 
 
-    @Query(value = "SELECT COUNT(*) FROM `usuario` WHERE usu_nombre_usuario =:user", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM usuario WHERE usu_nombre_usuario =:user", nativeQuery = true)
     int usuarioUnico(@Param("user") String user);
 
     Optional<Usuario> findByUsuNombreUsuario(String username);
