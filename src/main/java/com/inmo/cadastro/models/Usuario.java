@@ -34,7 +34,7 @@ public class Usuario implements UserDetails {
     @Column(name = "usuCorreo")
     private String usuCorreo;
 
-    @Column(name = "foto", columnDefinition = "TEXT")
+    @Column(name = "foto", columnDefinition = "LONGTEXT")
     private String foto;
 
     @Column(name = "usuEstado")

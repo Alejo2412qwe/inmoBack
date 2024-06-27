@@ -42,6 +42,10 @@ public class UsuarioService extends GenericServiceImpl<Usuario, Long> implements
         return usuarioRepository.searchUsersData(search, est);
     }
 
+    public List<Object[]> getUsersByRol(Long id) {
+        return usuarioRepository.getUsersByRol(id);
+    }
+
     public boolean usuarioUnico(String user) {
         int cont = usuarioRepository.usuarioUnico(user.trim());
         System.out.println("user = "+ user+"  count = "+ cont+"\n\n\n\n\n");
