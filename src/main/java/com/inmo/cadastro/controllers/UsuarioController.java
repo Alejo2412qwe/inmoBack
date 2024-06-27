@@ -48,6 +48,33 @@ public class UsuarioController {
         return new ResponseEntity<>(usuarioService.findByUsuId(id), HttpStatus.OK);
     }
 
+    @GetMapping("/getUsersByRol")
+    public ResponseEntity<List<Usuario>> allUsersData(@RequestParam Long id) {
+        List<Object[]> userData = usuarioService.getUsersByRol(id);
+        List<Usuario> users = new ArrayList<>();
+
+        for (Object[] data : userData) {
+            Usuario user = new Usuario();
+            user.setUsuId((Long) data[0]);
+            user.setUsuCorreo((String) data[1]);
+            user.setUsuEstado((int) data[2]);
+            user.setUsuFechaRegistro((Timestamp) data[3]);
+            user.setUsuNombreUsuario((String) data[4]);
+
+            Long rolId = (Long) data[5];
+            user.setRolId(rolService.findById(rolId));
+
+            Long personaId = (Long) data[6];
+            user.setUsuPerId(personaService.findById(personaId));
+
+            user.setFoto((String) data[7]);
+
+            users.add(user);
+        }
+
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
     @GetMapping("/allUsersData")
     public ResponseEntity<List<Usuario>> allUsersData(@RequestParam int est) {
         List<Object[]> userData = usuarioService.allUsersData(est);
