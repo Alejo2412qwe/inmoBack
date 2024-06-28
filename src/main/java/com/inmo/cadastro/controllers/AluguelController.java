@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin("*")
@@ -20,6 +21,11 @@ public class AluguelController {
     @GetMapping("/read")
     public ResponseEntity<List<Aluguel>> read() {
         return new ResponseEntity<>(aluguelService.findByAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/getDates")
+    public ResponseEntity<List<Date>> getDates() {
+        return new ResponseEntity<>(aluguelService.getDates(), HttpStatus.OK);
     }
 
 
