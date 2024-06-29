@@ -22,10 +22,6 @@ public class Aluguel {
 
     private String aluEndereco;
 
-    private int aluPropietario;
-
-    private int aluInquilino;
-
     @Column(name = "aluFotoEntrada", columnDefinition = "LONGTEXT")
     private String aluFotoEntrada;
 
@@ -38,4 +34,12 @@ public class Aluguel {
     @Column(name = "aluExpiracao")
     @Temporal(TemporalType.DATE)
     private Date aluExpiracao;
+
+    @ManyToOne
+    @JoinColumn(name = "aluPropietario", referencedColumnName = "usuId")
+    private Usuario aluPropietario;
+
+    @ManyToOne
+    @JoinColumn(name = "aluInquilino", referencedColumnName = "usuId")
+    private Usuario aluInquilino;
 }

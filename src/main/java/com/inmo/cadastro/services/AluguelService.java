@@ -7,6 +7,9 @@ import com.inmo.cadastro.services.genericServices.GenericServiceImpl;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.List;
+
 @Service
 public class AluguelService extends GenericServiceImpl<Aluguel, Long> implements GenericService<Aluguel, Long> {
 
@@ -19,5 +22,9 @@ public class AluguelService extends GenericServiceImpl<Aluguel, Long> implements
     @Override
     public CrudRepository<Aluguel, Long> getDao() {
         return aluguelRepository;
+    }
+
+    public Aluguel getAluguelByInquilino(Long id){
+        return aluguelRepository.getAluguelByInquilino(id);
     }
 }

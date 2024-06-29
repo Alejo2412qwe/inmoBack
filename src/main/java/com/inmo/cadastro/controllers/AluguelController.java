@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin("*")
@@ -26,6 +27,11 @@ public class AluguelController {
     @PostMapping("/create")
     public ResponseEntity<Aluguel> create(@RequestBody Aluguel p) {
         return new ResponseEntity<>(aluguelService.save(p), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/getAluguelByInquilino")
+    public ResponseEntity<Aluguel> getAluguelByInquilino(@RequestParam Long id) {
+        return new ResponseEntity<>(aluguelService.getAluguelByInquilino(id), HttpStatus.OK);
     }
 
     @PutMapping("/update")

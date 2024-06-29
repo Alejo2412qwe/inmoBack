@@ -43,6 +43,14 @@ public class Usuario implements UserDetails {
     @Column(name = "usuFechaRegistro")
     private Date usuFechaRegistro;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "aluPropietario")
+    private List<Aluguel> listaPropietarios;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "aluInquilino")
+    private List<Aluguel> listaInquilinos;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "usuPerId", referencedColumnName = "perId")
     private Persona usuPerId;
