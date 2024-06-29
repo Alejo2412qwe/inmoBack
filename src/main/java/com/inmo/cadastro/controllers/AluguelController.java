@@ -23,15 +23,15 @@ public class AluguelController {
         return new ResponseEntity<>(aluguelService.findByAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/getDates")
-    public ResponseEntity<List<Date>> getDates() {
-        return new ResponseEntity<>(aluguelService.getDates(), HttpStatus.OK);
-    }
-
 
     @PostMapping("/create")
     public ResponseEntity<Aluguel> create(@RequestBody Aluguel p) {
         return new ResponseEntity<>(aluguelService.save(p), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/getAluguelByInquilino")
+    public ResponseEntity<Aluguel> getAluguelByInquilino(@RequestParam Long id) {
+        return new ResponseEntity<>(aluguelService.getAluguelByInquilino(id), HttpStatus.OK);
     }
 
     @PutMapping("/update")

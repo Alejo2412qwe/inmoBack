@@ -24,7 +24,7 @@ public class AluguelService extends GenericServiceImpl<Aluguel, Long> implements
         return aluguelRepository;
     }
 
-    public List<Date> getDates() {
-        return aluguelRepository.getDates();
+    public Aluguel getAluguelByInquilino(Long id){
+        return aluguelRepository.getAluguelByInquilino(id);
     }
 }

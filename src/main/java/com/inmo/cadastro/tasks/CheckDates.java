@@ -23,7 +23,7 @@ public class CheckDates {
         this.emailService = emailService;
     }
 
-    @Scheduled(fixedDelay = 120000)
+    //@Scheduled(fixedDelay = 120000)
     //@Scheduled(cron = "0 0 21 * * ?")
     public void checkDates() {
         List<Date> dates = aluguelRepository.getDates();
