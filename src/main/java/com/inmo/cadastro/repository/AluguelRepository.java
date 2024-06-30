@@ -17,4 +17,6 @@ public interface AluguelRepository extends GenericRepository<Aluguel, Long> {
 
     @Query(nativeQuery = true, value = "SELECT a.* FROM aluguel a WHERE a.alu_inquilino = :id")
     Aluguel getAluguelByInquilino( @Param("id") Long id);
+
+    Aluguel findByAluId(Long id);
 }

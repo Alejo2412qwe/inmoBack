@@ -22,6 +22,9 @@ public class Aluguel {
 
     private String aluEndereco;
 
+    @Column(name = "aluComprovante", columnDefinition = "LONGTEXT")
+    private String aluComprovante;
+
     @Column(name = "aluFotoEntrada", columnDefinition = "LONGTEXT")
     private String aluFotoEntrada;
 

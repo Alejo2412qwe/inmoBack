@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @CrossOrigin("*")
@@ -32,6 +31,27 @@ public class AluguelController {
     @GetMapping("/getAluguelByInquilino")
     public ResponseEntity<Aluguel> getAluguelByInquilino(@RequestParam Long id) {
         return new ResponseEntity<>(aluguelService.getAluguelByInquilino(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/findByAluId")
+    public ResponseEntity<Aluguel> findByAluId(@RequestParam Long id) {
+        return new ResponseEntity<>(aluguelService.findByAluId(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/updateComprovante")
+    public ResponseEntity<Aluguel> updateComprovante(@RequestParam Long id, @RequestBody String com) {
+        Aluguel aluguel = aluguelService.findById(id);
+        if (aluguel != null) {
+            try {
+                aluguel.setAluComprovante(com);
+                aluguelService.save(aluguel);
+                return new ResponseEntity<>(HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("/update")
