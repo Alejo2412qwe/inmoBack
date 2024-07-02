@@ -24,7 +24,7 @@ public class Tasks {
         this.emailService = emailService;
     }
 
-    @Scheduled(fixedDelay = 120000)
+    //@Scheduled(fixedDelay = 120000)
     //@Scheduled(cron = "0 0 21 * * ?")
     public void checkDates() {
 
@@ -49,6 +49,62 @@ public class Tasks {
                 }
             }
         }
+    }
+
+    @Scheduled(fixedDelay = 120000)
+    //@Scheduled(cron = "0 0 21 * * ?")
+    public void checkPaymentDueDates() {
+
+        List<String> mails = usuarioRepository.getMailsOfInquilinos();
+        List<Aluguel> aluguels = aluguelRepository.findAll();
+        Date currentDate = new Date();
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(currentDate);
+        cal.add(Calendar.DAY_OF_MONTH, 15);
+        Date fifteenDaysLater = cal.getTime();
+
+        Set<String> sentEmails = new HashSet<>();
+
+        for (Aluguel aluguel : aluguels) {
+            if (isWithinFifteenDays(aluguel.getAluDiaPago(), currentDate, fifteenDaysLater)) {
+                for (String mail : mails) {
+                    if (!sentEmails.contains(mail)) {
+                        emailService.enviarEmail(mail, "Próximo Dia de Pagamento", "Olá administrador, faltam 15 dias para o próximo dia de pagamento do inquilino " + aluguel.getAluInquilino().getUsuPerId().getPerNombre() + " " + aluguel.getAluInquilino().getUsuPerId().getPerApellido());
+                        sentEmails.add(mail);
+                    }
+                }
+            }
+        }
+    }
+
+
+    private boolean isWithinFifteenDays(int diaPago, Date currentDate, Date fifteenDaysLater) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(currentDate);
+        int currentDayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+        int currentMonth = cal.get(Calendar.MONTH);
+        int currentYear = cal.get(Calendar.YEAR);
+
+        cal.setTime(fifteenDaysLater);
+        int fifteenDaysLaterMonth = cal.get(Calendar.MONTH);
+        int fifteenDaysLaterYear = cal.get(Calendar.YEAR);
+
+        for (int i = 0; i < 15; i++) {
+            cal.set(currentYear, currentMonth, currentDayOfMonth + i);
+            if (cal.get(Calendar.DAY_OF_MONTH) == diaPago &&
+                    cal.get(Calendar.MONTH) == currentMonth &&
+                    cal.get(Calendar.YEAR) == currentYear) {
+                return true;
+            }
+            if (cal.get(Calendar.DAY_OF_MONTH) == diaPago &&
+                    cal.get(Calendar.MONTH) == fifteenDaysLaterMonth &&
+                    cal.get(Calendar.YEAR) == fifteenDaysLaterYear) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private boolean isWithinOneMonth(Date date, Date currentDate, Date oneMonthLater) {
