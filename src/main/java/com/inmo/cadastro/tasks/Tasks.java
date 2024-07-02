@@ -24,9 +24,9 @@ public class Tasks {
         this.emailService = emailService;
     }
 
-    //@Scheduled(fixedDelay = 120000)
+    @Scheduled(fixedDelay = 120000)
     //@Scheduled(cron = "0 0 21 * * ?")
-    public void checkDates() {
+    public void checkDatesExpiration() {
 
         List<String> mails = usuarioRepository.getMailsOfAdmins();
         List<Aluguel> aluguels = aluguelRepository.findAll();
@@ -55,7 +55,6 @@ public class Tasks {
     //@Scheduled(cron = "0 0 21 * * ?")
     public void checkPaymentDueDates() {
 
-        List<String> mails = usuarioRepository.getMailsOfInquilinos();
         List<Aluguel> aluguels = aluguelRepository.findAll();
         Date currentDate = new Date();
 
@@ -67,12 +66,16 @@ public class Tasks {
         Set<String> sentEmails = new HashSet<>();
 
         for (Aluguel aluguel : aluguels) {
+            aluguel.setAluComprovante("");
             if (isWithinFifteenDays(aluguel.getAluDiaPago(), currentDate, fifteenDaysLater)) {
-                for (String mail : mails) {
-                    if (!sentEmails.contains(mail)) {
-                        emailService.enviarEmail(mail, "Próximo Dia de Pagamento", "Olá administrador, faltam 15 dias para o próximo dia de pagamento do inquilino " + aluguel.getAluInquilino().getUsuPerId().getPerNombre() + " " + aluguel.getAluInquilino().getUsuPerId().getPerApellido());
-                        sentEmails.add(mail);
-                    }
+                String email = aluguel.getAluInquilino().getUsuCorreo();
+                if (!sentEmails.contains(email)) {
+                    emailService.enviarEmail(
+                            email,
+                            "Próximo Dia de Pagamento",
+                            "Olá " + aluguel.getAluInquilino().getUsuPerId().getPerNombre() + " " + aluguel.getAluInquilino().getUsuPerId().getPerApellido() + ", está perto do seu dia de pagamento, lembre-se de enviar seu comprovante de pagamento."
+                    );
+                    sentEmails.add(email);
                 }
             }
         }
