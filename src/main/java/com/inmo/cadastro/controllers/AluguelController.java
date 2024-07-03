@@ -39,6 +39,11 @@ public class AluguelController {
         return new ResponseEntity<>(aluguelService.getAluguelByInquilino(id), HttpStatus.OK);
     }
 
+    @GetMapping("/cantidadAluguels")
+    public int getCantidadAluguels() {
+        return aluguelService.getCantidadAluguels();
+    }
+
     @GetMapping("/findByAluId")
     public ResponseEntity<Aluguel> findByAluId(@RequestParam Long id) {
         return new ResponseEntity<>(aluguelService.findByAluId(id), HttpStatus.OK);

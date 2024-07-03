@@ -161,6 +161,11 @@ public class UsuarioController {
         return new ResponseEntity<>(usuarioService.usuarioUnico(user), HttpStatus.OK);
     }
 
+    @GetMapping("/cantidadUsuarios")
+    public int getCantidadUsuarios() {
+        return usuarioService.getCantidadUsuarios();
+    }
+
     @PostMapping("/create")
     public ResponseEntity<Usuario> create(@RequestBody Usuario u) {
         return new ResponseEntity<>(usuarioService.save(u), HttpStatus.CREATED);

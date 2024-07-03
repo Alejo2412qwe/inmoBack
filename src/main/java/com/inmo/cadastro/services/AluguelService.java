@@ -37,6 +37,10 @@ public class AluguelService extends GenericServiceImpl<Aluguel, Long> implements
         return cont <= 0;
     }
 
+    public int getCantidadAluguels() {
+        return aluguelRepository.cantidadAluguels();
+    }
+
     public List<Object[]> searchAluguelData(String search, int est) {
         return aluguelRepository.searchAluguelData(search, est);
     }

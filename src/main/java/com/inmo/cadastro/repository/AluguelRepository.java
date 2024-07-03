@@ -23,6 +23,9 @@ public interface AluguelRepository extends GenericRepository<Aluguel, Long> {
     @Query(value = "SELECT COUNT(*) FROM aluguel WHERE alu_inquilino =:id", nativeQuery = true)
     int inquilinoUnico(@Param("id") Long id);
 
+    @Query(value = "SELECT COUNT(*) FROM aluguel", nativeQuery = true)
+    int cantidadAluguels();
+
     @Query(nativeQuery = true, value = "SELECT a.alu_id,a.alu_valor, a.alu_endereco, a.alu_propietario, a.alu_inquilino, a.alu_expiracao, a.alu_dia_pago, a.alu_foto_entrada, a.alu_foto_saida, a.alu_contrato, a.alu_comprovante " +
             "FROM aluguel a " +
             "JOIN usuario prop ON a.alu_propietario = prop.usu_id " +
