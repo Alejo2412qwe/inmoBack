@@ -16,7 +16,32 @@ public interface AluguelRepository extends GenericRepository<Aluguel, Long> {
     List<Date> getDates();
 
     @Query(nativeQuery = true, value = "SELECT a.* FROM aluguel a WHERE a.alu_inquilino = :id")
-    Aluguel getAluguelByInquilino( @Param("id") Long id);
+    Aluguel getAluguelByInquilino(@Param("id") Long id);
 
     Aluguel findByAluId(Long id);
+
+    @Query(value = "SELECT COUNT(*) FROM aluguel WHERE alu_inquilino =:id", nativeQuery = true)
+    int inquilinoUnico(@Param("id") Long id);
+
+    @Query(nativeQuery = true, value = "SELECT a.alu_id,a.alu_valor, a.alu_endereco, a.alu_propietario, a.alu_inquilino, a.alu_expiracao, a.alu_dia_pago, a.alu_foto_entrada, a.alu_foto_saida, a.alu_contrato, a.alu_comprovante " +
+            "FROM aluguel a " +
+            "JOIN usuario prop ON a.alu_propietario = prop.usu_id " +
+            "JOIN usuario inq ON a.alu_inquilino = inq.usu_id " +
+            "JOIN persona p_prop ON prop.usu_per_id = p_prop.per_id " +
+            "JOIN persona p_inq ON inq.usu_per_id = p_inq.per_id " +
+            "WHERE a.alu_estado = :est " +
+            "AND (p_prop.per_cedula LIKE CONCAT ('%', :search, '%') " +
+            "OR CONCAT(LOWER(p_prop.per_apellido), ' ', LOWER(p_prop.per_nombre)) LIKE LOWER(CONCAT('%', :search, '%')) " +
+            "OR CONCAT(LOWER(p_prop.per_nombre), ' ', LOWER(p_prop.per_apellido)) LIKE LOWER(CONCAT('%', :search, '%')) " +
+            "OR LOWER(prop.usu_nombre_usuario) LIKE LOWER(CONCAT('%', :search, '%')) " +
+            "OR p_prop.per_telefono LIKE CONCAT ('%', :search, '%') " +
+            "OR p_inq.per_cedula LIKE CONCAT ('%', :search, '%') " +
+            "OR CONCAT(LOWER(p_inq.per_apellido), ' ', LOWER(p_inq.per_nombre)) LIKE LOWER(CONCAT('%', :search, '%')) " +
+            "OR CONCAT(LOWER(p_inq.per_nombre), ' ', LOWER(p_inq.per_apellido)) LIKE LOWER(CONCAT('%', :search, '%')) " +
+            "OR LOWER(inq.usu_nombre_usuario) LIKE LOWER(CONCAT('%', :search, '%')) " +
+            "OR p_inq.per_telefono LIKE CONCAT ('%', :search, '%')) " +
+            "OR a.alu_endereco LIKE CONCAT ('%', :search, '%') " +
+            "ORDER BY a.alu_endereco"
+    )
+    List<Object[]> searchAluguelData(@Param("search") String search, @Param("est") int est);
 }

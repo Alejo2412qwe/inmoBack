@@ -24,11 +24,20 @@ public class AluguelService extends GenericServiceImpl<Aluguel, Long> implements
         return aluguelRepository;
     }
 
-    public Aluguel getAluguelByInquilino(Long id){
+    public Aluguel getAluguelByInquilino(Long id) {
         return aluguelRepository.getAluguelByInquilino(id);
     }
 
-    public  Aluguel findByAluId(Long id){
+    public Aluguel findByAluId(Long id) {
         return aluguelRepository.findByAluId(id);
+    }
+
+    public boolean inquilinoUnico(Long id) {
+        int cont = aluguelRepository.inquilinoUnico(id);
+        return cont <= 0;
+    }
+
+    public List<Object[]> searchAluguelData(String search, int est) {
+        return aluguelRepository.searchAluguelData(search, est);
     }
 }
