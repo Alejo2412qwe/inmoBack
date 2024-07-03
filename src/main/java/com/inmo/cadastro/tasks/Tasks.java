@@ -40,7 +40,7 @@ public class Tasks {
         Set<String> sentEmails = new HashSet<>();
 
         for (Aluguel aluguel : aluguels) {
-            if (isWithinOneMonth(aluguel.getAluExpiracao(), currentDate, oneMonthLater)) {
+            if (isWithinOneMonth(aluguel.getAluExpiracao(), currentDate, oneMonthLater) && aluguel.getAluEstado() == 1) {
                 for (String mail : mails) {
                     if (!sentEmails.contains(mail)) {
                         emailService.enviarEmail(mail, "Expiração Do Contrato", "Olá administrador, falta 1 mês para expirar o contrato do " + aluguel.getAluInquilino().getUsuPerId().getPerNombre() + " " + aluguel.getAluInquilino().getUsuPerId().getPerApellido());
