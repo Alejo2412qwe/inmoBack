@@ -37,6 +37,9 @@ public interface UsuarioRepository extends GenericRepository<Usuario, Long> {
     @Query(nativeQuery = true, value = "SELECT u.usu_correo FROM usuario u WHERE u.rol_id = 1")
     List<String> getMailsOfAdmins();
 
+    @Query(nativeQuery = true, value = "SELECT u.usu_correo FROM usuario u WHERE u.rol_id = 4")
+    List<String> getMailsOfInquilinos();
+
     @Query(nativeQuery = true, value = "SELECT u.usu_id, u.usu_estado, u.usu_per_id " +
             "FROM usuario u JOIN persona p ON u.usu_per_id = p.per_id" +
             "  WHERE u.usu_estado= :est  " +
@@ -47,6 +50,8 @@ public interface UsuarioRepository extends GenericRepository<Usuario, Long> {
 
     Usuario findByUsuId(Long id);
 
+    @Query(value = "SELECT COUNT(*) FROM usuario", nativeQuery = true)
+    int cantidadUsuarios();
 
     @Query(value = "SELECT COUNT(*) FROM usuario WHERE usu_nombre_usuario =:user", nativeQuery = true)
     int usuarioUnico(@Param("user") String user);

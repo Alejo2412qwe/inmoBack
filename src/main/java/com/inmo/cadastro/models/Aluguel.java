@@ -22,6 +22,19 @@ public class Aluguel {
 
     private String aluEndereco;
 
+    private int aluDiaPago;
+
+    /*
+    * 0 = Inativo
+    * 1 = Ativo
+    * */
+    private int aluEstado;
+
+    private int aluValor;
+
+    @Column(name = "aluComprovante", columnDefinition = "LONGTEXT")
+    private String aluComprovante;
+
     @Column(name = "aluFotoEntrada", columnDefinition = "LONGTEXT")
     private String aluFotoEntrada;
 
