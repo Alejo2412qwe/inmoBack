@@ -28,10 +28,19 @@ public class AluguelController {
         return new ResponseEntity<>(aluguelService.findByAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/allAlugueisData")
+    public ResponseEntity<List<Aluguel>> read(@RequestParam int est) {
+        return new ResponseEntity<>(aluguelService.allAlugueisData(est), HttpStatus.OK);
+    }
 
     @PostMapping("/create")
     public ResponseEntity<Aluguel> create(@RequestBody Aluguel p) {
         return new ResponseEntity<>(aluguelService.save(p), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/getSumaValores")
+    public ResponseEntity<Double> getSumaValores(@RequestParam int est) {
+        return new ResponseEntity<>(aluguelService.getSumaValores(est), HttpStatus.OK);
     }
 
     @GetMapping("/getAluguelByInquilino")
@@ -89,6 +98,22 @@ public class AluguelController {
         }
 
         return new ResponseEntity<>(aluguels, HttpStatus.OK);
+    }
+
+    @PutMapping("/updateContrato")
+    public ResponseEntity<Aluguel> updateContrato(@RequestParam Long id, @RequestBody String con) {
+        Aluguel aluguel = aluguelService.findById(id);
+        if (aluguel != null) {
+            try {
+                aluguel.setAluContrato(con);
+                aluguelService.save(aluguel);
+                return new ResponseEntity<>(HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("/updateComprovante")

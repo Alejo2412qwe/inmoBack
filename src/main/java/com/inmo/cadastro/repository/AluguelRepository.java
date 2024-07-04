@@ -15,6 +15,12 @@ public interface AluguelRepository extends GenericRepository<Aluguel, Long> {
     @Query(nativeQuery = true, value = "SELECT alu_expiracao FROM aluguel")
     List<Date> getDates();
 
+    @Query(nativeQuery = true,value = "SELECT SUM(alu_valor) FROM aluguel WHERE alu_estado = :est")
+    Double getSumaValores(@Param("est") int est);
+
+    @Query(nativeQuery = true, value = "SELECT a.* FROM aluguel a WHERE a.alu_estado = :est")
+    public List<Aluguel> allAlugueisData(@Param("est") int est);
+
     @Query(nativeQuery = true, value = "SELECT a.* FROM aluguel a WHERE a.alu_inquilino = :id")
     Aluguel getAluguelByInquilino(@Param("id") Long id);
 
@@ -33,16 +39,10 @@ public interface AluguelRepository extends GenericRepository<Aluguel, Long> {
             "JOIN persona p_prop ON prop.usu_per_id = p_prop.per_id " +
             "JOIN persona p_inq ON inq.usu_per_id = p_inq.per_id " +
             "WHERE a.alu_estado = :est " +
-            "AND (p_prop.per_cedula LIKE CONCAT ('%', :search, '%') " +
-            "OR CONCAT(LOWER(p_prop.per_apellido), ' ', LOWER(p_prop.per_nombre)) LIKE LOWER(CONCAT('%', :search, '%')) " +
+            "AND CONCAT(LOWER(p_prop.per_apellido), ' ', LOWER(p_prop.per_nombre)) LIKE LOWER(CONCAT('%', :search, '%')) " +
             "OR CONCAT(LOWER(p_prop.per_nombre), ' ', LOWER(p_prop.per_apellido)) LIKE LOWER(CONCAT('%', :search, '%')) " +
-            "OR LOWER(prop.usu_nombre_usuario) LIKE LOWER(CONCAT('%', :search, '%')) " +
-            "OR p_prop.per_telefono LIKE CONCAT ('%', :search, '%') " +
-            "OR p_inq.per_cedula LIKE CONCAT ('%', :search, '%') " +
             "OR CONCAT(LOWER(p_inq.per_apellido), ' ', LOWER(p_inq.per_nombre)) LIKE LOWER(CONCAT('%', :search, '%')) " +
             "OR CONCAT(LOWER(p_inq.per_nombre), ' ', LOWER(p_inq.per_apellido)) LIKE LOWER(CONCAT('%', :search, '%')) " +
-            "OR LOWER(inq.usu_nombre_usuario) LIKE LOWER(CONCAT('%', :search, '%')) " +
-            "OR p_inq.per_telefono LIKE CONCAT ('%', :search, '%')) " +
             "OR a.alu_endereco LIKE CONCAT ('%', :search, '%') " +
             "ORDER BY a.alu_endereco"
     )

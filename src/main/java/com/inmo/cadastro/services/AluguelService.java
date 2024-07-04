@@ -37,6 +37,14 @@ public class AluguelService extends GenericServiceImpl<Aluguel, Long> implements
         return cont <= 0;
     }
 
+    public List<Aluguel> allAlugueisData(int est){
+        return aluguelRepository.allAlugueisData(est);
+    }
+
+    public Double getSumaValores(int est){
+        return aluguelRepository.getSumaValores(est);
+    }
+
     public int getCantidadAluguels() {
         return aluguelRepository.cantidadAluguels();
     }
