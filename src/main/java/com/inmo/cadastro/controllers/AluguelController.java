@@ -92,8 +92,6 @@ public class AluguelController {
 
             aluguel.setAluContrato((String) data[9]);
 
-            aluguel.setAluComprovante((String) data[10]);
-
             aluguels.add(aluguel);
         }
 
@@ -106,22 +104,6 @@ public class AluguelController {
         if (aluguel != null) {
             try {
                 aluguel.setAluContrato(con);
-                aluguelService.save(aluguel);
-                return new ResponseEntity<>(HttpStatus.OK);
-            } catch (Exception e) {
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @PutMapping("/updateComprovante")
-    public ResponseEntity<Aluguel> updateComprovante(@RequestParam Long id, @RequestBody String com) {
-        Aluguel aluguel = aluguelService.findById(id);
-        if (aluguel != null) {
-            try {
-                aluguel.setAluComprovante(com);
                 aluguelService.save(aluguel);
                 return new ResponseEntity<>(HttpStatus.OK);
             } catch (Exception e) {

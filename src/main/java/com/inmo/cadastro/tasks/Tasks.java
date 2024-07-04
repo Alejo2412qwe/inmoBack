@@ -55,8 +55,8 @@ public class Tasks {
         return date.after(currentDate) && date.before(oneMonthLater);
     }
 
-    @Scheduled(fixedDelay = 120000)
-//@Scheduled(cron = "0 0 21 * * ?")
+   @Scheduled(fixedDelay = 120000)
+    //@Scheduled(cron = "0 0 21 * * ?")
     public void checkPaymentDueDates() {
         List<Aluguel> aluguels = aluguelRepository.findAll();
         Date currentDate = new Date();
@@ -70,8 +70,6 @@ public class Tasks {
 
         for (Aluguel aluguel : aluguels) {
             if (isWithinFiveDays(aluguel.getAluDiaPago(), currentDate, fiveDaysLater)) {
-                aluguel.setAluComprovante("");
-                aluguelRepository.save(aluguel);
                 String email = aluguel.getAluInquilino().getUsuCorreo();
                 if (!sentEmails.contains(email)) {
                     emailService.enviarEmail(

@@ -1,5 +1,6 @@
 package com.inmo.cadastro.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -32,9 +34,6 @@ public class Aluguel {
 
     private int aluValor;
 
-    @Column(name = "aluComprovante", columnDefinition = "LONGTEXT")
-    private String aluComprovante;
-
     @Column(name = "aluFotoEntrada", columnDefinition = "LONGTEXT")
     private String aluFotoEntrada;
 
@@ -55,4 +54,8 @@ public class Aluguel {
     @ManyToOne
     @JoinColumn(name = "aluInquilino", referencedColumnName = "usuId")
     private Usuario aluInquilino;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "aluId")
+    private List<Comprovante> listaComprovantes;
 }
