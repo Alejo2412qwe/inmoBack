@@ -138,6 +138,24 @@ public class AluguelController {
         }
     }
 
+    @PutMapping("/updateEst")
+    public ResponseEntity<Aluguel> updateEst(@RequestParam Long id, @RequestParam int est) {
+        Aluguel aluguel = aluguelService.findById(id);
+        if (aluguel != null) {
+            try {
+
+                aluguel.setAluEstado(est);
+                aluguelService.save(aluguel);
+                return new ResponseEntity<>(HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 
     @DeleteMapping("/delete")
     public ResponseEntity<Aluguel> delete(@RequestParam Long id) {

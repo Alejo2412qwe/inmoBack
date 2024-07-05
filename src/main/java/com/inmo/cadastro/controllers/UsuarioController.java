@@ -5,6 +5,7 @@ import com.inmo.cadastro.security.Auth.AuthResponse;
 import com.inmo.cadastro.security.Auth.AuthService;
 import com.inmo.cadastro.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,6 +32,9 @@ public class UsuarioController {
     private RolService rolService;
 
     private final PasswordEncoder passwordEncoder;
+
+    @Value("${senhaDono}")
+    private String senhaDono;
 
     public UsuarioController(AuthService authService, PasswordEncoder passwordEncoder) {
         this.authService = authService;
@@ -156,9 +160,13 @@ public class UsuarioController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/usuarioUnico")
-    public ResponseEntity<Boolean> usuarioUnico(@RequestParam String user) {
-        return new ResponseEntity<>(usuarioService.usuarioUnico(user), HttpStatus.OK);
+    @GetMapping("/senhaDono")
+    public ResponseEntity<Boolean> senhaDono(@RequestParam String senha) {
+        if (senha.equals(senhaDono)) {
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/cantidadUsuarios")
@@ -174,6 +182,11 @@ public class UsuarioController {
     @PostMapping(value = "register")
     public ResponseEntity<AuthResponse> register(@RequestBody Usuario request) {
         return ResponseEntity.ok(authService.register(request));
+    }
+
+    @GetMapping("/usuarioUnico")
+    public ResponseEntity<Boolean> usuarioUnico(@RequestParam String user) {
+        return new ResponseEntity<>(usuarioService.usuarioUnico(user), HttpStatus.OK);
     }
 
     @PutMapping("/update")

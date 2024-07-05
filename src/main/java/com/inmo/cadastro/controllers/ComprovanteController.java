@@ -17,6 +17,11 @@ public class ComprovanteController {
     @Autowired
     private ComprovanteService comprovanteService;
 
+    @GetMapping("/findComprovantesByFechaPartesAndInquilino")
+    public ResponseEntity<List<Comprovante>> findComprovantesByFechaPartesAndInquilino(@RequestParam int dia, @RequestParam int mes, @RequestParam int ano) {
+        return new ResponseEntity<>(comprovanteService.findComprovantesByFechaPartesAndInquilino(dia, mes, ano), HttpStatus.OK);
+    }
+
     @GetMapping("/read")
     public ResponseEntity<List<Comprovante>> read() {
         return new ResponseEntity<>(comprovanteService.findByAll(), HttpStatus.OK);

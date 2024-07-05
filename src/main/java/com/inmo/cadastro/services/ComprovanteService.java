@@ -7,6 +7,8 @@ import com.inmo.cadastro.services.genericServices.GenericServiceImpl;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ComprovanteService extends GenericServiceImpl<Comprovante, Long> implements GenericService<Comprovante, Long> {
 
@@ -27,5 +29,9 @@ public class ComprovanteService extends GenericServiceImpl<Comprovante, Long> im
 
     public Comprovante getComprovanteByComFechaRegistro(Long id) {
         return comprovanteRepository.getComprovanteByComFechaRegistro(id);
+    }
+
+    public List<Comprovante> findComprovantesByFechaPartesAndInquilino(int dia, int mes, int ano) {
+        return comprovanteRepository.findComprovantesByFechaPartesAndInquilino(dia, mes, ano);
     }
 }
