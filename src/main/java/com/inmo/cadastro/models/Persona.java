@@ -28,6 +28,9 @@ public class Persona {
     private String perApellido;
     private String perDireccion;
     private String perTelefono;
+    private String perRG;
+    private String perEstadoCivil;
+    private String perNacionalidade;
 
     @Column(name = "perFechaNacimiento")
     @Temporal(TemporalType.DATE)
