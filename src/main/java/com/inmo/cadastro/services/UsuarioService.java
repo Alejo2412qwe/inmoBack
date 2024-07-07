@@ -42,8 +42,8 @@ public class UsuarioService extends GenericServiceImpl<Usuario, Long> implements
         return usuarioRepository.searchUsersData(search, est);
     }
 
-    public List<Object[]> getUsersByRol(Long id) {
-        return usuarioRepository.getUsersByRol(id);
+    public List<Object[]> getUsersByRol(Long id, int est) {
+        return usuarioRepository.getUsersByRol(id,est);
     }
 
     public int getCantidadUsuarios() {
