@@ -53,8 +53,8 @@ public class UsuarioController {
     }
 
     @GetMapping("/getUsersByRol")
-    public ResponseEntity<List<Usuario>> allUsersData(@RequestParam Long id) {
-        List<Object[]> userData = usuarioService.getUsersByRol(id);
+    public ResponseEntity<List<Usuario>> allUsersData(@RequestParam Long id, @RequestParam int est) {
+        List<Object[]> userData = usuarioService.getUsersByRol(id, est);
         List<Usuario> users = new ArrayList<>();
 
         for (Object[] data : userData) {

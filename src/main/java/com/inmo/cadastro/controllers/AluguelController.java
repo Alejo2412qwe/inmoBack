@@ -48,6 +48,11 @@ public class AluguelController {
         return new ResponseEntity<>(aluguelService.getAluguelByInquilino(id), HttpStatus.OK);
     }
 
+    @GetMapping("/getAluguelByPropietario")
+    public ResponseEntity<List<Aluguel>> getAluguelByPropietario(@RequestParam Long id) {
+        return new ResponseEntity<>(aluguelService.getAluguelByPropietario(id), HttpStatus.OK);
+    }
+
     @GetMapping("/cantidadAluguels")
     public int getCantidadAluguels() {
         return aluguelService.getCantidadAluguels();
@@ -127,6 +132,8 @@ public class AluguelController {
                 aluguel.setAluFotoEntrada(a.getAluFotoEntrada());
                 aluguel.setAluFotoSaida(a.getAluFotoSaida());
                 aluguel.setAluExpiracao(a.getAluExpiracao());
+                aluguel.setAluValor(a.getAluValor());
+                aluguel.setAluDiaPago(a.getAluDiaPago());
 
                 return new ResponseEntity<>(aluguelService.save(aluguel), HttpStatus.CREATED);
             } catch (Exception e) {
