@@ -24,6 +24,9 @@ public interface AluguelRepository extends GenericRepository<Aluguel, Long> {
     @Query(nativeQuery = true, value = "SELECT a.* FROM aluguel a WHERE a.alu_inquilino = :id")
     Aluguel getAluguelByInquilino(@Param("id") Long id);
 
+    @Query(nativeQuery = true, value = "SELECT * FROM aluguel WHERE alu_propietario = :id")
+    List<Aluguel> getAluguelByPropietario(@Param("id") Long id);
+
     Aluguel findByAluId(Long id);
 
     @Query(value = "SELECT COUNT(*) FROM aluguel WHERE alu_inquilino =:id AND alu_estado = 1", nativeQuery = true)

@@ -11,4 +11,7 @@ public interface PersonaRepository extends GenericRepository<Persona, Long> {
 
     @Query(value = "SELECT COUNT(*) FROM `persona` WHERE per_cedula = :ci", nativeQuery = true)
     int cedulaUnica(@Param("ci") String ci);
+
+    @Query(value = "SELECT COUNT(*) FROM `persona` WHERE perrg = :rg", nativeQuery = true)
+    int rgUnico(@Param("rg") String rg);
 }

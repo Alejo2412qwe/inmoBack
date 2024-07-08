@@ -27,4 +27,10 @@ public class PersonaService extends GenericServiceImpl<Persona, Long> implements
 
         return cont <= 0;
     }
+
+    public boolean rgUnico(String rg) {
+        int cont = personaRepository.rgUnico(rg.trim());
+
+        return cont <= 0;
+    }
 }
