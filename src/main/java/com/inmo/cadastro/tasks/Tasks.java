@@ -24,8 +24,7 @@ public class Tasks {
         this.emailService = emailService;
     }
 
-    @Scheduled(fixedDelay = 120000)
-    //@Scheduled(cron = "0 0 21 * * ?")
+    @Scheduled(fixedRate = 432000000)
     public void checkDatesExpiration() {
 
         List<String> mails = usuarioRepository.getMailsOfAdmins();
@@ -40,11 +39,13 @@ public class Tasks {
         Set<String> sentEmails = new HashSet<>();
 
         for (Aluguel aluguel : aluguels) {
-            if (isWithinOneMonth(aluguel.getAluExpiracao(), currentDate, oneMonthLater) && aluguel.getAluEstado() == 1) {
-                for (String mail : mails) {
-                    if (!sentEmails.contains(mail)) {
-                        emailService.enviarEmail(mail, "Expiração Do Contrato", "Olá administrador, falta 1 mês para expirar o contrato do " + aluguel.getAluInquilino().getUsuPerId().getPerNombre() + " " + aluguel.getAluInquilino().getUsuPerId().getPerApellido());
-                        sentEmails.add(mail);
+            if (aluguel.getAluEstado() == 1) {
+                if (isWithinOneMonth(aluguel.getAluExpiracao(), currentDate, oneMonthLater) && aluguel.getAluEstado() == 1) {
+                    for (String mail : mails) {
+                        if (!sentEmails.contains(mail)) {
+                            emailService.enviarEmail(mail, "Expiração Do Contrato", "Olá administrador, falta 1 mês para expirar o contrato do " + aluguel.getAluInquilino().getUsuPerId().getPerNombre() + " " + aluguel.getAluInquilino().getUsuPerId().getPerApellido());
+                            sentEmails.add(mail);
+                        }
                     }
                 }
             }
@@ -55,8 +56,8 @@ public class Tasks {
         return date.after(currentDate) && date.before(oneMonthLater);
     }
 
-   @Scheduled(fixedDelay = 120000)
-    //@Scheduled(cron = "0 0 21 * * ?")
+    //@Scheduled(fixedDelay = 120000)
+    @Scheduled(cron = "0 0 21 * * ?")
     public void checkPaymentDueDates() {
         List<Aluguel> aluguels = aluguelRepository.findAll();
         Date currentDate = new Date();
