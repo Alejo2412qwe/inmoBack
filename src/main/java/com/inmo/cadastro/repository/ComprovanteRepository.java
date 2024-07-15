@@ -6,9 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
 import java.util.List;
 
+@SuppressWarnings({"SqlDialectInspection", "SqlNoDataSourceInspection"})
 @Repository
 public interface ComprovanteRepository extends GenericRepository<Comprovante, Long> {
 
@@ -33,4 +33,6 @@ public interface ComprovanteRepository extends GenericRepository<Comprovante, Lo
     List<Comprovante> findComprovantesByFechaPartesAndInquilino(@Param("dia") Integer dia, @Param("mes") Integer mes, @Param("ano") Integer ano);
 
 
+    @Query(nativeQuery = true,value = "SELECT * FROM comprovante WHERE alu_id = :aluguelId AND MONTH(com_fecha_registro) = :mes AND YEAR(com_fecha_registro) = :ano")
+    List<Comprovante> findComprovantesByAluguelAndMonth(@Param("aluguelId") Long aluguelId, @Param("mes") int mes, @Param("ano") int ano);
 }

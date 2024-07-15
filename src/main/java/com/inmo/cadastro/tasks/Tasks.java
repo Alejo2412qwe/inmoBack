@@ -2,7 +2,9 @@ package com.inmo.cadastro.tasks;
 
 import com.inmo.cadastro.email.EmailService;
 import com.inmo.cadastro.models.Aluguel;
+import com.inmo.cadastro.models.Comprovante;
 import com.inmo.cadastro.repository.AluguelRepository;
+import com.inmo.cadastro.repository.ComprovanteRepository;
 import com.inmo.cadastro.repository.UsuarioRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -13,19 +15,19 @@ import java.util.*;
 public class Tasks {
 
     private final AluguelRepository aluguelRepository;
-
     private final UsuarioRepository usuarioRepository;
-
+    private final ComprovanteRepository comprovanteRepository;
     private final EmailService emailService;
 
-    public Tasks(AluguelRepository aluguelRepository, UsuarioRepository usuarioRepository, EmailService emailService) {
+    public Tasks(AluguelRepository aluguelRepository, UsuarioRepository usuarioRepository, ComprovanteRepository comprovanteRepository, EmailService emailService) {
         this.aluguelRepository = aluguelRepository;
         this.usuarioRepository = usuarioRepository;
+        this.comprovanteRepository = comprovanteRepository;
         this.emailService = emailService;
     }
 
-    @Scheduled(fixedDelay = 120000)
-    //@Scheduled(cron = "0 0 21 * * ?")
+
+    @Scheduled(fixedRate = 432000000)
     public void checkDatesExpiration() {
 
         List<String> mails = usuarioRepository.getMailsOfAdmins();
@@ -40,11 +42,13 @@ public class Tasks {
         Set<String> sentEmails = new HashSet<>();
 
         for (Aluguel aluguel : aluguels) {
-            if (isWithinOneMonth(aluguel.getAluExpiracao(), currentDate, oneMonthLater) && aluguel.getAluEstado() == 1) {
-                for (String mail : mails) {
-                    if (!sentEmails.contains(mail)) {
-                        emailService.enviarEmail(mail, "Expiração Do Contrato", "Olá administrador, falta 1 mês para expirar o contrato do " + aluguel.getAluInquilino().getUsuPerId().getPerNombre() + " " + aluguel.getAluInquilino().getUsuPerId().getPerApellido());
-                        sentEmails.add(mail);
+            if (aluguel.getAluEstado() == 1) {
+                if (isWithinOneMonth(aluguel.getAluExpiracao(), currentDate, oneMonthLater) && aluguel.getAluEstado() == 1) {
+                    for (String mail : mails) {
+                        if (!sentEmails.contains(mail)) {
+                            emailService.enviarEmail(mail, "Expiração Do Contrato", "Olá administrador, falta 1 mês para expirar o contrato do " + aluguel.getAluInquilino().getUsuPerId().getPerNombre() + " " + aluguel.getAluInquilino().getUsuPerId().getPerApellido());
+                            sentEmails.add(mail);
+                        }
                     }
                 }
             }
@@ -55,8 +59,8 @@ public class Tasks {
         return date.after(currentDate) && date.before(oneMonthLater);
     }
 
-   @Scheduled(fixedDelay = 120000)
-    //@Scheduled(cron = "0 0 21 * * ?")
+    //@Scheduled(fixedDelay = 120000)
+    @Scheduled(cron = "0 0 21 * * ?")
     public void checkPaymentDueDates() {
         List<Aluguel> aluguels = aluguelRepository.findAll();
         Date currentDate = new Date();
@@ -109,6 +113,40 @@ public class Tasks {
         }
 
         return false;
+    }
+
+    @Scheduled(fixedDelay = 120000)
+    //@Scheduled(cron = "0 0 21 * * ?")
+    public void checkOverduePayments() {
+        List<String> mails = usuarioRepository.getMailsOfAdmins();
+        List<Aluguel> aluguels = aluguelRepository.findAll();
+        Date currentDate = new Date();
+
+        Calendar currentCal = Calendar.getInstance();
+        currentCal.setTime(currentDate);
+        int currentDay = currentCal.get(Calendar.DAY_OF_MONTH);
+        int currentMonth = currentCal.get(Calendar.MONTH) + 1; // Calendar.MONTH is zero-based
+        int currentYear = currentCal.get(Calendar.YEAR);
+
+        for (Aluguel aluguel : aluguels) {
+            if (aluguel.getAluEstado() == 1) {
+                int paymentDay = aluguel.getAluDiaPago();
+
+                if (paymentDay != 0 && paymentDay < currentDay) {
+                    List<Comprovante> comprovantes = comprovanteRepository.findComprovantesByAluguelAndMonth(aluguel.getAluId(), currentMonth, currentYear);
+
+                    if (comprovantes.isEmpty()) {
+                        int daysOverdue = currentDay - paymentDay;
+
+                        for (String mail : mails) {
+                            String tenantName = aluguel.getAluInquilino().getUsuPerId().getPerNombre() + " " + aluguel.getAluInquilino().getUsuPerId().getPerApellido();
+                            String message = "Olá administrador, o inquilino " + tenantName + " está com um atraso de " + daysOverdue + " dias no pagamento do aluguel.";
+                            emailService.enviarEmail(mail, "Atraso No Pagamento Do Aluguel", message);
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }
