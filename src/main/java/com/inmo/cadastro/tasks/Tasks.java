@@ -6,7 +6,6 @@ import com.inmo.cadastro.models.Comprovante;
 import com.inmo.cadastro.repository.AluguelRepository;
 import com.inmo.cadastro.repository.ComprovanteRepository;
 import com.inmo.cadastro.repository.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -15,14 +14,17 @@ import java.util.*;
 @Component
 public class Tasks {
 
-    @Autowired
-    private AluguelRepository aluguelRepository;
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-    @Autowired
-    private ComprovanteRepository comprovanteRepository;
-    @Autowired
-    private EmailService emailService;
+    private final AluguelRepository aluguelRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final ComprovanteRepository comprovanteRepository;
+    private final EmailService emailService;
+
+    public Tasks(AluguelRepository aluguelRepository, UsuarioRepository usuarioRepository, ComprovanteRepository comprovanteRepository, EmailService emailService) {
+        this.aluguelRepository = aluguelRepository;
+        this.usuarioRepository = usuarioRepository;
+        this.comprovanteRepository = comprovanteRepository;
+        this.emailService = emailService;
+    }
 
 
     @Scheduled(fixedRate = 432000000)
