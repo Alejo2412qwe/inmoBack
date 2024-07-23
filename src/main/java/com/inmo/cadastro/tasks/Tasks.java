@@ -59,7 +59,6 @@ public class Tasks {
         return date.after(currentDate) && date.before(oneMonthLater);
     }
 
-    //@Scheduled(fixedDelay = 120000)
     @Scheduled(cron = "0 0 21 * * ?")
     public void checkPaymentDueDates() {
         List<Aluguel> aluguels = aluguelRepository.findAll();
@@ -115,8 +114,7 @@ public class Tasks {
         return false;
     }
 
-    @Scheduled(fixedDelay = 120000)
-    //@Scheduled(cron = "0 0 21 * * ?")
+    @Scheduled(cron = "0 0 21 * * ?")
     public void checkOverduePayments() {
         List<String> mails = usuarioRepository.getMailsOfAdmins();
         List<Aluguel> aluguels = aluguelRepository.findAll();
