@@ -119,6 +119,54 @@ public class AluguelController {
         }
     }
 
+    @PutMapping("/updateCopiaContrato")
+    public ResponseEntity<Aluguel> updateCopiaContrato(@RequestParam Long id, @RequestBody String con) {
+        Aluguel aluguel = aluguelService.findById(id);
+        if (aluguel != null) {
+            try {
+                aluguel.setAluContratoCopia(con);
+                aluguelService.save(aluguel);
+                return new ResponseEntity<>(HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/exCopiaContrato")
+    public ResponseEntity<Aluguel> exCopiaContrato(@RequestParam Long id) {
+        Aluguel aluguel = aluguelService.findById(id);
+        if (aluguel != null) {
+            try {
+                aluguel.setAluContratoCopia("");
+                aluguelService.save(aluguel);
+                return new ResponseEntity<>(HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/exContrato")
+    public ResponseEntity<Aluguel> exContrato(@RequestParam Long id) {
+        Aluguel aluguel = aluguelService.findById(id);
+        if (aluguel != null) {
+            try {
+                aluguel.setAluContrato("");
+                aluguelService.save(aluguel);
+                return new ResponseEntity<>(HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PutMapping("/update")
     public ResponseEntity<Aluguel> update(@RequestParam Long id, @RequestBody Aluguel a) {
         Aluguel aluguel = aluguelService.findById(id);

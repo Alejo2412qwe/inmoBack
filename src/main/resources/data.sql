@@ -1,3 +1,5 @@
+-- noinspection SqlNoDataSourceInspectionForFile
+
 INSERT INTO rol (rol_id, rol_nombre)
 VALUES (1, 'Administrador'),
        (2, 'Empleado'),

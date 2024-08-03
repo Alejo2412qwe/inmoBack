@@ -43,6 +43,9 @@ public class Aluguel {
     @Column(name = "aluContrato", columnDefinition = "LONGTEXT")
     private String aluContrato;
 
+    @Column(name = "aluContratoCopia", columnDefinition = "LONGTEXT")
+    private String aluContratoCopia;
+
     @Column(name = "aluExpiracao")
     @Temporal(TemporalType.DATE)
     private Date aluExpiracao;
